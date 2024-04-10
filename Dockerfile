@@ -1,32 +1,9 @@
-#
-# Ubuntu Dockerfile
-#
-# https://github.com/dockerfile/ubuntu
-#
+FROM centos  //继承至centos
+ENV mypath /tmp  //设置环境变量
+WORKDIR $mypath //指定工作目录
 
-# Pull base image.
-FROM ubuntu:20.04
+RUN yum -y install vim //执行yum命令安装vim
+RUN yum -y install net-tools //执行yum命令安装net-tools
 
-# Install.
-RUN \
-  sed -i 's/# \(.*multiverse$\)/\1/g' /etc/apt/sources.list && \
-  apt-get update && \
-  apt-get -y upgrade && \
-  apt-get install -y build-essential && \
-  apt-get install -y software-properties-common && \
-  apt-get install -y byobu curl git htop man unzip vim wget && \
-  rm -rf /var/lib/apt/lists/*
-
-# Add files.
-ADD root/.bashrc /root/.bashrc
-ADD root/.gitconfig /root/.gitconfig
-ADD root/.scripts /root/.scripts
-
-# Set environment variables.
-ENV HOME /root
-
-# Define working directory.
-WORKDIR /root
-
-# Define default command.
-CMD ["bash"]
+EXPOSE 80 //对外默认暴露的端口是80
+CMD /bin/bash //CMD 容器启动命令，在运行容器的时候会自动执行这行命令，比如当我们 docker run -it centos 的时候，就会直接进入bash
